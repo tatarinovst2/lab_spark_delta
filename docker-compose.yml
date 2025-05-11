@@ -1,0 +1,21 @@
+services:
+  spark-app:
+    build: .
+    container_name: spark_app
+    volumes:
+      - .:/app
+    ports:
+      - "4040:4040"
+    command: ["python", "src/etl.py"]
+    depends_on:
+      - mlflow
+
+  mlflow:
+    build:
+      context: .
+      dockerfile: Dockerfile.mlflow
+    container_name: mlflow_server
+    volumes:
+      - ./logs/mlflow_logs:/mlflow
+    ports:
+      - "5001:5000"
